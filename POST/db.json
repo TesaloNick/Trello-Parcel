@@ -1,0 +1,56 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Alex",
+      "job": "Google",
+      "email": "alex@gmail.com"
+    },
+    {
+      "id": 2,
+      "name": "Max",
+      "job": "Amazone",
+      "email": "Max@gmail.com"
+    },
+    {
+      "id": 3,
+      "name": "Lena",
+      "job": "yandex",
+      "email": "lena@gmail.com"
+    },
+    {
+      "name": "asd",
+      "job": "asd",
+      "email": "asd",
+      "id": 4
+    },
+    {
+      "name": "asd",
+      "job": "asd",
+      "email": "asd",
+      "id": 5
+    },
+    {
+      "name": "asdweede",
+      "job": "asdsdf",
+      "email": "asdsdf",
+      "id": 6
+    },
+    {
+      "name": "",
+      "job": "",
+      "email": "",
+      "id": 7
+    }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "body": "some comment",
+      "postId": 1
+    }
+  ],
+  "profile": {
+    "name": "typicode"
+  }
+}

@@ -2,14 +2,27 @@ export default class Trello {
   constructor() {
     this.surface = document.querySelector('.surface')
     this.formAddColumn = document.querySelector('.surface__add-column-form')
-    this.tasks = JSON.parse(localStorage.getItem('tasks')) || []
+    this.tasks = []
+    // this.tasks = this.getColumns()
     this.counterColumns = JSON.parse(localStorage.getItem('counterColumns')) || 0
-    // this.events()
+    // this.tasks = JSON.parse(localStorage.getItem('tasks')) || []
+    // this.counterColumns = JSON.parse(localStorage.getItem('counterColumns')) || 0
+    this.BASE_URL = 'http://localhost:3001'
+    // {
+    //   "id": 1,
+    //   "head": "as",
+    //   "tasks": [
+    //     {
+    //       "content": "",
+    //       "id": 1
+    //     }
+    //   ]
+    // }
   }
 
   events() {
+    // console.log(this.tasks);
     this.printTasks(this.tasks)
-    // this.surface.addEventListener('mousedown', (e) => this.catchItem(e))
     this.surface.addEventListener('submit', (e) => this.addTask(e))
     this.surface.addEventListener('click', (e) => {
       this.closeTask(e)
@@ -22,14 +35,56 @@ export default class Trello {
     this.surface.addEventListener('submit', (e) => this.addColumn(e))
   }
 
-  printTasks(tasks) {
+  async getColumns() {
+    const response = await fetch(`${this.BASE_URL}/columns`)
+    const data = await response.json()
+    console.log(data);
+    return data
+  }
+
+  async postColumns() {
+    fetch(`${this.BASE_URL}/columns`, {
+      method: 'POST',
+      headers: {
+        "Content-type": "application/json",
+        // 'Accept': 'application/json'
+      },
+      body: JSON.stringify(this.tasks)
+    })
+    // fetch(`${BASE_URL}/columns`)
+    //   .then(response => response.json())
+    //   .then(data => render(data))
+  }
+
+  async putColumns() {
+    fetch(`${this.BASE_URL}/columns`, {
+      method: 'PUT',
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify(this.tasks)
+    })
+    // fetch(`${BASE_URL}/users`)
+    //   .then(response => response.json())
+    //   .then(data => render(data))
+  }
+
+  async deleteColumns() {
+    fetch(`${this.BASE_URL}/columns`, {
+      method: 'DELETE'
+    }).then(res => {
+      this.postColumns()
+    })
+  }
+
+  async printTasks(tasks) {
     this.surface.innerHTML = `
     <form action="" class="surface__add-column-form">
       <input type="text" class="surface__add-column-input" placeholder="+ Add column" required>
     </form> 
     `
-    console.log(tasks);
-    tasks.map(column => {
+    await this.deleteColumns()
+    this.tasks = await this.getColumns()
+
+    this.tasks.map(column => {
       const columnBox = document.createElement('div')
       columnBox.classList.add('surface__column')
       columnBox.id = column.id
@@ -54,8 +109,8 @@ export default class Trello {
 
       document.querySelector('.surface__add-column-form').insertAdjacentElement('beforebegin', columnBox)
     })
-
-    localStorage.setItem('tasks', JSON.stringify(this.tasks))   // перезапись localStorage
+    // await this.postColumns()
+    // localStorage.setItem('tasks', JSON.stringify(this.tasks))
   }
 
   addColumn(e) {
@@ -68,9 +123,7 @@ export default class Trello {
         tasks: []
       })
       this.counterColumns++
-      localStorage.setItem('counterColumns', JSON.stringify(this.counterColumns))
       this.printTasks(this.tasks)
-
     }
   }
 
@@ -111,7 +164,6 @@ export default class Trello {
       )
 
       this.printTasks(this.tasks)
-      localStorage.setItem('tasks', JSON.stringify(this.tasks))
     }
   }
 

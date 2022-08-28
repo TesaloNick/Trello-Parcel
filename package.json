@@ -4,11 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "db": "json-server --watch db/db.json --port 3001",
     "watch": "parcel index.html --open --port 3000"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@parcel/transformer-sass": "^2.7.0"
+  },
+  "dependencies": {
+    "json-server": "^0.17.0"
   }
 }
